@@ -1,0 +1,14 @@
+apiVersion: 1
+
+datasources:
+  - name: prometheus-observ
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+  - name: jaeger
+    type: jaeger
+    access: proxy
+    url: http://jaeger:16686
+    jsonData:
+      nodeGraph:
+        enabled: true

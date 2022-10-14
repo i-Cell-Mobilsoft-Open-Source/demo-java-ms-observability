@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:annox="http://annox.dev.java.net" xmlns="http://dto.sampler.icellmobilsoft.hu/sample/rest/post"
+    xmlns:coffeeCommon="http://common.dto.coffee.icellmobilsoft.hu/common" xmlns:coffeeCommonservice="http://common.dto.coffee.icellmobilsoft.hu/commonservice"
+    targetNamespace="http://dto.sampler.icellmobilsoft.hu/sample/rest/post" elementFormDefault="qualified" attributeFormDefault="unqualified" jaxb:version="2.0"
+    jaxb:extensionBindingPrefixes="xjc annox">
+
+    <xsd:import namespace="http://common.dto.coffee.icellmobilsoft.hu/common" />
+    <xsd:import namespace="http://common.dto.coffee.icellmobilsoft.hu/commonservice" />
+
+    <!-- SIMPLE TYPES -->
+    <xsd:simpleType name="SampleValueEnumType">
+        <xsd:annotation>
+            <xsd:documentation>Sample value enum type</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="coffeeCommon:SimpleText10NotBlankType">
+            <xsd:enumeration value="VALUE_A">
+                <xsd:annotation>
+                    <xsd:documentation>Value A</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="VALUE_B">
+                <xsd:annotation>
+                    <xsd:documentation>Value B</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="VALUE_C">
+                <xsd:annotation>
+                    <xsd:documentation>Value C</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="SampleStatusEnumType">
+        <xsd:annotation>
+            <xsd:documentation>Status sample enum type</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="coffeeCommon:SimpleText10NotBlankType">
+            <xsd:enumeration value="PROCESSING">
+                <xsd:annotation>
+                    <xsd:documentation>Processing status</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="DONE">
+                <xsd:annotation>
+                    <xsd:documentation>Done status</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- GROUPS -->
+    <!-- COMPLEX TYPES -->
+    <xsd:complexType name="SampleCoreType">
+        <xsd:annotation>
+            <xsd:documentation>Sample core type</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="columnA" type="coffeeCommon:SimpleText30NotBlankType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>[Description of columnA]</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="columnB" type="SampleValueEnumType">
+                <xsd:annotation>
+                    <xsd:documentation>[Description of columnB]</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="SampleType">
+        <xsd:annotation>
+            <xsd:documentation>Sample type</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="SampleCoreType">
+                <xsd:sequence>
+                    <xsd:element name="sampleId" type="coffeeCommon:EntityIdType">
+                        <xsd:annotation>
+                            <xsd:documentation>[Description of sampleId]</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="sampleStatus" type="SampleStatusEnumType">
+                        <xsd:annotation>
+                            <xsd:documentation>[Description of sampleStatus]</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- REQUEST/RESPONSE COMPLEX TYPES -->
+    <xsd:complexType name="SampleRequestType">
+        <xsd:annotation>
+            <xsd:documentation>[Description business object] request type</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="coffeeCommonservice:BaseRequestType">
+                <xsd:sequence>
+                    <xsd:element name="sample" type="SampleCoreType">
+                        <xsd:annotation>
+                            <xsd:documentation>[Description of business object]</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="SampleResponseType">
+        <xsd:annotation>
+            <xsd:documentation>[Description business object] response type</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="coffeeCommonservice:BaseResponseType">
+                <xsd:sequence>
+                    <xsd:element name="sample" type="SampleType">
+                        <xsd:annotation>
+                            <xsd:documentation>[Description of business object]</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- REQUEST/RESPONSE ELEMENTS -->
+    <xsd:element name="SampleRequest">
+        <xsd:annotation>
+            <xsd:documentation>[Description business object] request</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="SampleRequestType" />
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="SampleResponse">
+        <xsd:annotation>
+            <xsd:documentation>[Description business object] response</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="SampleResponseType" />
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

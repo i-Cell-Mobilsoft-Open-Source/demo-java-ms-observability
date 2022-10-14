@@ -1,0 +1,4 @@
+#$ {jbossHomeName}/bin/jboss-cli.sh --connect --file=enable-opentracing.cli
+
+
+/extension=org.wildfly.extension.microprofile.health-smallrye:add

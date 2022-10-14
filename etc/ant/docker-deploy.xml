@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="docker-deploy">
+
+	<import file="${basedir}/../../etc/ant/setenv.xml" as="setenv" />
+	<import-ant-contrib />
+
+	<target name="deploy-war-dockerA" description="Deploys war to running container via mvn">
+		<exec executable="docker" taskname="docker cp" failonerror="true">
+			<arg value="cp" />
+			<arg value="${basedir}/target/${service.name}-${service.version}.war" />
+			<arg value="${service.name}-local-a:/home/icellmobilsoft/wildfly/standalone/deployments/ROOT.war" />
+		</exec>
+		<echo>Service:[${service.name}] was copied to wildfly!</echo>
+		<antcall target="setenv.print-properties" />
+	</target>
+	
+	<target name="deploy-war-dockerB" description="Deploys war to running container via mvn">
+		<exec executable="docker" taskname="docker cp" failonerror="true">
+			<arg value="cp" />
+			<arg value="${basedir}/target/${service.name}-${service.version}.war" />
+			<arg value="${service.name}-local-b:/home/icellmobilsoft/wildfly/standalone/deployments/ROOT.war" />
+		</exec>
+		<echo>Service:[${service.name}] was copied to wildfly!</echo>
+		<antcall target="setenv.print-properties" />
+	</target>
+
+	<target name="start-observ" description="Start observ">
+		<echo>Starting docker containers for observability</echo>
+		<echo>docker-compose -f ../docker-compose/docker-compose.local.observability.yml up</echo>
+		<antcall target="setenv.print-properties" />
+		<exec executable="docker-compose" failonerror="true" taskname="docker-compose up">
+			<arg value="-f" />
+			<arg value="${basedir}/../../etc/docker-compose/docker-compose.local.observability.yml" />
+			<arg value="up" />
+			<arg line="-d" />
+		</exec>
+	</target>
+
+	<target name="stop-observ" description="Stop observ">
+		<echo>Stop docker containers for observability</echo>
+		<echo>docker-compose -f ${etc.config.dir}/docker-compose/docker-compose.local.observability.yml down</echo>
+		<exec executable="docker-compose" failonerror="true" taskname="docker-compose down">
+			<arg value="-f" />
+			<arg value="${basedir}/../../etc/docker-compose/docker-compose.local.observability.yml" />
+			<arg value="down" />
+		</exec>
+	</target>
+</project>

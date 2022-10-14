@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>hu.icellmobilsoft.sampler</groupId>
+        <artifactId>sampler</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>hu.icellmobilsoft.sampler.common</groupId>
+    <artifactId>common</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>common-core-jee</module>
+        <module>common-util</module>
+        <module>common-rest-jee</module>
+        <module>common-jpa</module>
+        <module>common-system-rest</module>
+        <module>common-system-jpa</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>hu.icellmobilsoft.sampler.bom</groupId>
+                <artifactId>bom-all</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

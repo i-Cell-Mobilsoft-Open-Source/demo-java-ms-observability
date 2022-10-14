@@ -1,0 +1,37 @@
+info:
+  title: Sample REST Service
+  description: |
+    Sample REST operációkkal kapcsolatos szolgáltatások.
+
+    Általános válaszok hiba esetén:
+    * __400__ - Bad Request
+    * __401__ - Unauthorized
+    * __404__ - Not found
+    * __418__ - Database object not found
+    * __500__ - Internal Server Error
+  version: ${project.version}
+  x-logo:
+    url: logo.png
+    backgroundColor: #FFFFFF
+    altText: Sample logo
+components:
+  parameters:
+    sessionTokenHeader:
+      name: sessionToken
+      in: header
+      description: session token
+      required: true
+      schema:
+        type: string
+        maxLength: 50
+        minLength: 1
+        pattern: '.*\\S.*'
+    loginHeader:
+      name: login
+      in: header
+      description: login
+      required: true
+      schema:
+        type: string
+        minLength: 15
+        pattern: '[a-zA-Z0-9\-@\.]{6,30}'

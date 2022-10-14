@@ -1,0 +1,29 @@
+# futtatas:
+# docker-compose -f docker-compose.local.postgres.yml up -d
+#
+# belemaszas:
+# docker exec -it postgres-local /bin/bash
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgres-local
+    image: 'dockerhub-dockerio.icellmobilsoft.hu/postgres:14.1'
+    ports:
+      - '5432:5432' # jdbc port
+    environment:
+      TZ: Europe/Budapest
+      POSTGRES_USER: core_exemption_service
+      POSTGRES_PASSWORD: mlffTitkosPassword123!
+      POSTGRES_DB: coredb
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
+        reservations:
+          memory: 64M
+networks:
+  default:
+    external:
+      # Ha hiányolná a network-öt: docker network create mlff-exemption-local-network
+      name: bs-local-network

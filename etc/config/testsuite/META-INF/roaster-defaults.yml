@@ -1,0 +1,13 @@
+sampler:
+    service:
+        sample:
+            base:
+                uri: http://localhost:8081
+            management:
+                uri: http://localhost:9991
+testsuite:
+    rest:
+        sampleService:
+            sample:
+                baseUriKey: sampler.service.sample.base.uri
+                path: /rest/sample

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<project name="service-common" default="">
+
+
+    <!--  ant imports  -->
+    <import file="${basedir}/../../etc/ant/setenv.xml" as="setenv"/>
+    <import-ant-contrib/>
+
+    <import file="${basedir}/../../etc/ant/docker-deploy.xml" as="docker-deploy"/>
+</project>

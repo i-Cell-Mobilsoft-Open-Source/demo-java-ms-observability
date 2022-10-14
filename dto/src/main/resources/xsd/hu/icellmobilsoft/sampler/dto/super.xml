@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://dto.sampler.icellmobilsoft.hu/super"
+    targetNamespace="http://sample.sampler.icellmobilsoft.hu/super" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:import namespace="http://dto.sampler.icellmobilsoft.hu/sample/rest/post" />
+
+</xs:schema>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project name="setenv">
+    <macrodef name="import-ant-contrib" description="Imports ant-contrib if its available, fails otherwise.">
+        <sequential>
+            <!--  ant-contrib.jar-nak bent kell lennie a lokális ${ANT_HOME}/lib konyvtárban -->
+            <available resource="net/sf/antcontrib/antcontrib.properties" property="is.contrib.present"/>
+            <fail unless="is.contrib.present"
+                    message="The ant-contrib library of version 0.6 (ant-contrib-0.6.jar) must be present on classpath! Download the binary and place the jar in $ANT_HOME/lib! (https://sourceforge.net/projects/ant-contrib/files/ant-contrib/ant-contrib-0.6/)"/>
+            <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="setenv"
+            description="Sets and calculates properties for deployment based on offset, docker image, and invoker project">
+        <attribute name="offset" default="0"/>
+        <sequential>
+            <import-ant-contrib/>
+            <!--  properties -->
+            <property name="service.name" value="${ant.project.name}"/>
+            <xmlproperty file="pom.xml" prefix="pom" />
+            <property name="service.version" value="${pom.project.parent.version}"/>
+            <property name="service" value="${pom.project.properties.service.name}"/>
+            <property name="container.name" value="${ant.project.name}"/>
+            <property name="wf.port.offset" value="@{offset}"/>
+
+            <!--  calculate ports based on offset  -->
+            <math result="application.port" operand1="8080" operation="+" operand2="${wf.port.offset}"
+                    datatype="int"/>
+            <math result="management.port" operand1="9990" operation="+" operand2="${wf.port.offset}"
+                    datatype="int"/>
+            <math result="debug.port" operand1="8787" operation="+" operand2="${wf.port.offset}" datatype="int"/>
+        </sequential>
+    </macrodef>
+
+    <target name="print-properties" description="Print inner properties used by ant">
+        <echo level="info" taskname="$${service.name}         ">[${service.name}] - Name for microservice, used only for logging</echo>
+    	<echo level="info" taskname="$${service}              ">[${service}] - Name of the microservice</echo>
+        <echo level="info" taskname="$${service.version}      ">[${service.version}] - Service version</echo>
+        <echo level="info" taskname="$${container.name}       ">[${container.name}] - Name of the docker container</echo>
+        <echo level="info" taskname="$${wf.port.offset}       ">[${wf.port.offset}] - The offset of the container's exposed ports</echo>
+        <echo level="info" taskname="$${application.port}     ">[${application.port}] - The exposed port for the application</echo>
+        <echo level="info" taskname="$${management.port}      ">[${management.port}] - The exposed port for the management interface</echo>
+        <echo level="info" taskname="$${debug.port}           ">[${debug.port}] - The exposed JVM debug port</echo>
+        <echo level="info" taskname="$${basedir}              ">[${basedir}] - Ant base directory</echo>
+        <property environment="my_env" />
+        <echo level="info" taskname="PATH                    ">[${my_env.PATH}] - User environment PATH variable</echo>
+    </target>
+</project>
