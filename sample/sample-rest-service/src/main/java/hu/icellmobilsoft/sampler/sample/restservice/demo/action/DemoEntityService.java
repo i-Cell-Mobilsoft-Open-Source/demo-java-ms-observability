@@ -17,20 +17,27 @@
  * limitations under the License.
  * #L%
  */
-package hu.icellmobilsoft.sampler.sample.readiness.restservice.rest;
+package hu.icellmobilsoft.sampler.sample.restservice.demo.action;
 
-import javax.ws.rs.Path;
+import javax.enterprise.inject.Model;
+import javax.inject.Inject;
 
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import hu.icellmobilsoft.coffee.cdi.logger.AppLogger;
+import hu.icellmobilsoft.coffee.cdi.logger.ThisLogger;
+import hu.icellmobilsoft.sampler.common.system.jpa.service.BaseService;
+import hu.icellmobilsoft.sampler.model.sample.DemoEntity;
 
 /**
- * REST Registered rest client
+ * service
  * 
  * @author czenczl
- * @since 0.1.0
+ *
  */
-@RegisterRestClient
-@Path("/rest/c")
-public interface ICRestRegisteredClient extends ICRest {
+@Model
+public class DemoEntityService extends BaseService<DemoEntity> {
+
+	@Inject
+	@ThisLogger
+	private AppLogger log;
 
 }

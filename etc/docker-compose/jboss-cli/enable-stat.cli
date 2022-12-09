@@ -1,5 +1,0 @@
-#$ {jbossHomeName}/bin/jboss-cli.sh --connect --file=enable-opentracing.cli
-
-
-#/subsystem=microprofile-health-smallrye:add(security-enabled=false, empty-liveness-checks-status="UP", empty-readiness-checks-status="UP", empty-startup-checks-status="UP")
-/subsystem=undertow:write-attribute(name=statistics-enabled,value=true)

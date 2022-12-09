@@ -17,17 +17,15 @@
  * limitations under the License.
  * #L%
  */
-package hu.icellmobilsoft.sampler.sample.restservice.action;
+package hu.icellmobilsoft.sampler.sample.restservice.demo.action;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import org.eclipse.microprofile.metrics.Metadata;
-import org.eclipse.microprofile.metrics.MetricRegistry;
-import org.eclipse.microprofile.metrics.MetricType;
-import org.eclipse.microprofile.metrics.Tag;
 import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -36,17 +34,16 @@ import hu.icellmobilsoft.coffee.tool.utils.string.RandomUtil;
 import hu.icellmobilsoft.sampler.common.system.rest.action.BaseAction;
 import hu.icellmobilsoft.sampler.dto.sample.rest.post.SampleResponse;
 import hu.icellmobilsoft.sampler.model.sample.DemoEntity;
-import hu.icellmobilsoft.sampler.sample.restservice.demo.action.DemoEntityService;
 import hu.icellmobilsoft.sampler.sample.restservice.rest.ISampleRestRegisteredClient;
 
 /**
- * Sample action
+ * 
  * 
  * @author czenczl
- * @since 0.1.0
+ *
  */
 @Model
-public class RestSampleGetAction extends BaseAction {
+public class RestSlowDemoAction extends BaseAction {
 
 	@Inject
 	private DemoEntityService demoEntityService;
@@ -55,31 +52,23 @@ public class RestSampleGetAction extends BaseAction {
 	@RestClient
 	private ISampleRestRegisteredClient sampleRest;
 
-	@Inject
-	private MetricRegistry metricRegistry;
-
 	/**
 	 * Dummy sample reponse
 	 * 
 	 * @return SampleResponse Sample response with random id
 	 * @throws BaseException if error
 	 */
-	public SampleResponse sample() throws BaseException {
+	public SampleResponse slowDemo() throws BaseException {
 		SampleResponse response = new SampleResponse();
 
-		CDI.current().select(RestSampleGetAction.class).get().createEntity();
+		// business logic
+		CDI.current().select(RestSlowDemoAction.class).get().slowBusinessLogic();
 
-		// custom metric
-		Tag keyTag = new Tag("DEMO", "DEMO");
-		Metadata metadata = Metadata.builder().withName("DEMO").withDescription("DEMO").withType(MetricType.COUNTER)
-				.build();
-		metricRegistry.counter(metadata, keyTag).inc();
+		// business logic
+		CDI.current().select(RestSlowDemoAction.class).get().businessLogic();
 
-		// call second rest
-		sampleRest.getSlowDemo();
-
-		// some logic
-		CDI.current().select(RestSampleGetAction.class).get().businessLogic();
+		// entity save
+		CDI.current().select(RestSlowDemoAction.class).get().createEntity();
 
 		handleSuccessResultType(response);
 		return response;
@@ -88,10 +77,22 @@ public class RestSampleGetAction extends BaseAction {
 	/**
 	 * logic
 	 */
-	@Traced(operationName = "A_logic")
+	@Traced(operationName = "B_logic")
 	public void businessLogic() {
 		try {
-			Thread.sleep(500);
+			Thread.sleep(700);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * demo logic
+	 */
+	@Traced(operationName = "B_slowLogic")
+	public void slowBusinessLogic() {
+		try {
+			Thread.sleep(ThreadLocalRandom.current().nextInt(2, 10) * 1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -102,6 +103,7 @@ public class RestSampleGetAction extends BaseAction {
 	 * 
 	 * @throws BaseException ex
 	 */
+	@Traced
 	@Transactional
 	public void createEntity() throws BaseException {
 		DemoEntity entity = new DemoEntity();

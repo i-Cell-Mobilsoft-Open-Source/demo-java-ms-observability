@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package hu.icellmobilsoft.sampler.sample.restservice.action;
+package hu.icellmobilsoft.sampler.sample.restservice.demo.action;
 
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.spi.CDI;
@@ -28,16 +28,12 @@ import org.eclipse.microprofile.metrics.Metadata;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.MetricType;
 import org.eclipse.microprofile.metrics.Tag;
-import org.eclipse.microprofile.opentracing.Traced;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import hu.icellmobilsoft.coffee.dto.exception.BaseException;
 import hu.icellmobilsoft.coffee.tool.utils.string.RandomUtil;
 import hu.icellmobilsoft.sampler.common.system.rest.action.BaseAction;
 import hu.icellmobilsoft.sampler.dto.sample.rest.post.SampleResponse;
 import hu.icellmobilsoft.sampler.model.sample.DemoEntity;
-import hu.icellmobilsoft.sampler.sample.restservice.demo.action.DemoEntityService;
-import hu.icellmobilsoft.sampler.sample.restservice.rest.ISampleRestRegisteredClient;
 
 /**
  * Sample action
@@ -46,14 +42,10 @@ import hu.icellmobilsoft.sampler.sample.restservice.rest.ISampleRestRegisteredCl
  * @since 0.1.0
  */
 @Model
-public class RestSampleGetAction extends BaseAction {
+public class DemoMetricAction extends BaseAction {
 
 	@Inject
 	private DemoEntityService demoEntityService;
-
-	@Inject
-	@RestClient
-	private ISampleRestRegisteredClient sampleRest;
 
 	@Inject
 	private MetricRegistry metricRegistry;
@@ -64,37 +56,20 @@ public class RestSampleGetAction extends BaseAction {
 	 * @return SampleResponse Sample response with random id
 	 * @throws BaseException if error
 	 */
-	public SampleResponse sample() throws BaseException {
+	public SampleResponse demo() throws BaseException {
 		SampleResponse response = new SampleResponse();
 
-		CDI.current().select(RestSampleGetAction.class).get().createEntity();
+		// db save
+		CDI.current().select(DemoMetricAction.class).get().createEntity();
 
-		// custom metric
+		// add metric
 		Tag keyTag = new Tag("DEMO", "DEMO");
 		Metadata metadata = Metadata.builder().withName("DEMO").withDescription("DEMO").withType(MetricType.COUNTER)
 				.build();
 		metricRegistry.counter(metadata, keyTag).inc();
 
-		// call second rest
-		sampleRest.getSlowDemo();
-
-		// some logic
-		CDI.current().select(RestSampleGetAction.class).get().businessLogic();
-
 		handleSuccessResultType(response);
 		return response;
-	}
-
-	/**
-	 * logic
-	 */
-	@Traced(operationName = "A_logic")
-	public void businessLogic() {
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -107,5 +82,10 @@ public class RestSampleGetAction extends BaseAction {
 		DemoEntity entity = new DemoEntity();
 		entity.setId(RandomUtil.generateId());
 		demoEntityService.save(entity);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

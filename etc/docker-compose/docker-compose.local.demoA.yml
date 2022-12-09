@@ -11,7 +11,6 @@ services:
       args:
         WILDFLY_BASE_IMAGE: 'dockerhub.icellmobilsoft.hu/wildfly-full/postgresql-jdbc:0.6.0'
         WILDFLY_CLI_PATH: wildfly/*.*
-    image: sample-service-a:0.0.1
     volumes:
       - './wildfly/wf.properties:/appconfig/app.properties'
     ports:

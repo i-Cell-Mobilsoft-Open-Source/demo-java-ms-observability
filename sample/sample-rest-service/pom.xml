@@ -14,13 +14,6 @@
 	</properties>
 
 	<dependencies>
-	
-	<dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <scope>compile</scope>
-    </dependency>
-	
 		<dependency>
 			<groupId>hu.icellmobilsoft.sampler.common</groupId>
 			<artifactId>common-system-jpa</artifactId>
