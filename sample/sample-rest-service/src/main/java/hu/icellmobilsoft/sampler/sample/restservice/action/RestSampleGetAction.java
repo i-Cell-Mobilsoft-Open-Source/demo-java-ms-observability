@@ -36,7 +36,7 @@ import hu.icellmobilsoft.coffee.tool.utils.string.RandomUtil;
 import hu.icellmobilsoft.sampler.common.system.rest.action.BaseAction;
 import hu.icellmobilsoft.sampler.dto.sample.rest.post.SampleResponse;
 import hu.icellmobilsoft.sampler.model.sample.DemoEntity;
-import hu.icellmobilsoft.sampler.sample.restservice.demo.action.DemoEntityService;
+import hu.icellmobilsoft.sampler.sample.readiness.restservice.rest.DemoEntityService;
 import hu.icellmobilsoft.sampler.sample.restservice.rest.ISampleRestRegisteredClient;
 
 /**

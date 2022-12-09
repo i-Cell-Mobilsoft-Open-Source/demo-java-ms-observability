@@ -1,0 +1,64 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: restaservicemonitor
+  labels:
+    serviceMonitorSelector: service-monitor-selector
+spec:
+  selector:
+    matchLabels:
+      app: restA
+  endpoints:
+    - interval: 1s
+      scheme: http
+      targetPort: 9990
+      path: /metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: restbservicemonitor
+  labels:
+    serviceMonitorSelector: service-monitor-selector
+spec:
+  selector:
+    matchLabels:
+      app: restB
+  endpoints:
+    - interval: 1s
+      scheme: http
+      targetPort: 9990
+      path: /metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: restcservicemonitor
+  labels:
+    serviceMonitorSelector: service-monitor-selector
+spec:
+  selector:
+    matchLabels:
+      app: restC
+  endpoints:
+    - interval: 1s
+      scheme: http
+      targetPort: 9990
+      path: /metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: custom-state-service-monitor
+  labels:
+    serviceMonitorSelector: service-monitor-selector
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  endpoints:
+    - interval: 1s
+      scheme: http
+      targetPort: 8080
+      path: /metrics
+      

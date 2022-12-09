@@ -6,11 +6,12 @@ services:
   sample-service-a:
     container_name: sample-rest-service-local-a
     build:
-      context: .
-      dockerfile: develop.dockerfile
+      context: ../../
+      dockerfile: etc/docker-compose/release.dockerfile
       args:
-        WILDFLY_BASE_IMAGE: 'dockerhub.icellmobilsoft.hu/wildfly-full/postgresql-jdbc:0.6.0'
-        WILDFLY_CLI_PATH: wildfly/*.*
+        WILDFLY_BASE_IMAGE: 'dockerhub.icellmobilsoft.hu/wildfly-ms/postgresql-jdbc:0.6.0'
+        WILDFLY_CLI_PATH: etc/docker-compose/jboss-cli/*.*
+        PROPERTIES_FILE: 'etc/docker-compose/wildfly/wf.properties'
     image: sample-service-a:0.0.1
     volumes:
       - './wildfly/wf.properties:/appconfig/app.properties'

@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-c-deployment
+  labels:
+    app: restC
+    component: backend
+    instance: restC
+    name: restC
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: restC
+      component: backend
+      instance: restC
+      name: restC
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: restC
+        component: backend
+        instance: restC
+        name: restC
+    spec:
+      containers:
+      - name: rest-c-container
+        image: sample-service-c:0.0.1
+        resources:
+          limits:
+            cpu: "3"
+          requests:
+            cpu: "3"
+        imagePullPolicy: Never
+        env:
+        - name: POSTGRESQL_DS_MAX_POOL_SIZE
+          value: "14"
+        - name: DATASOURCE_USAGE_TRESHOLD_PERCENT
+          value: "70"
+        - name: CPU_USAGE_TRESHOLD_PERCENT
+          value: "70"
+        ports:
+        - containerPort: 9990
+        - containerPort: 8080
+        # system probes
+        startupProbe:
+          httpGet:
+            path: /health/started
+            port: 9990
+          initialDelaySeconds: 15  
+          periodSeconds: 8
+          failureThreshold: 50
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 9990
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 100
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 9990
+          initialDelaySeconds: 20
+          periodSeconds: 3
+#          periodSeconds: 40
+          timeoutSeconds: 3
+          failureThreshold: 8
+#          failureThreshold: 150
+          successThreshold: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rest-c-service
+  labels:
+    app: restC
+    component: backend
+    instance: restC
+    name: restC
+spec:
+  type: NodePort
+  selector:
+    app: restC
+    component: backend
+    instance: restC
+    name: restC
+  ports:
+  - name: management
+    protocol: TCP
+    port: 9990
+    targetPort: 9990
+    nodePort: 31002
+  - name: business
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 32002

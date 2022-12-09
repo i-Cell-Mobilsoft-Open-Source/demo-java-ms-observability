@@ -4,16 +4,31 @@
 	<deployment>
 		<dependencies>
 			<module name="org.apache.commons.io" />
-			<module name="org.apache.commons.codec" />
-			<module name="org.apache.commons.beanutils" />
-			<module name="org.apache.commons.collections" />
-			<module name="org.apache.commons.lang3"/>
 			<module name="org.apache.httpcomponents" />
 			<module name="com.google.guava" />
-			<module name="com.google.code.gson"/>
 			<!-- io.smallrye.config:smallrye-config-source-yaml miatt kell -->
 			<module name="io.smallrye.common.classloader" />
+			<module name="io.smallrye.config" />
+			<module name="io.smallrye.common.constraint" />
 			<module name="org.yaml.snakeyaml" />
+			<module name="org.apache.commons.collections" />
+			<module name="com.google.code.gson" />
+			<module name="org.apache.commons.beanutils" />
+		
+		
+		
+		
+<!-- 			<module name="org.apache.commons.io" /> -->
+<!-- 			<module name="org.apache.commons.codec" /> -->
+<!-- 			<module name="org.apache.commons.beanutils" /> -->
+<!-- 			<module name="org.apache.commons.collections" /> -->
+<!--  			<module name="org.apache.commons.lang3"/> --> 
+<!-- 			<module name="org.apache.httpcomponents" /> -->
+<!-- 			<module name="com.google.guava" /> -->
+<!-- 			<module name="com.google.code.gson"/> -->
+<!-- 			io.smallrye.config:smallrye-config-source-yaml miatt kell --> 
+<!-- 			<module name="io.smallrye.common.classloader" /> -->
+<!-- 			<module name="org.yaml.snakeyaml" /> -->
 		</dependencies>
 	</deployment>
 </jboss-deployment-structure>

@@ -19,27 +19,21 @@
  */
 package hu.icellmobilsoft.sampler.sample.restservice.demo.health;
 
-import java.sql.Connection;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import javax.inject.Inject;
 
-import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
-import org.eclipse.microprofile.health.Readiness;
+import org.eclipse.microprofile.metrics.Gauge;
+import org.eclipse.microprofile.metrics.Metadata;
+import org.eclipse.microprofile.metrics.MetricID;
+import org.eclipse.microprofile.metrics.MetricRegistry;
+import org.eclipse.microprofile.metrics.MetricType;
+import org.eclipse.microprofile.metrics.Tag;
+import org.eclipse.microprofile.metrics.annotation.RegistryType;
 
-import hu.icellmobilsoft.coffee.se.logging.Logger;
+import hu.icellmobilsoft.sampler.sample.readiness.restservice.rest.UsageCache;
 
 /**
  * 
@@ -51,61 +45,66 @@ import hu.icellmobilsoft.coffee.se.logging.Logger;
 @Dependent
 public class DatabaseHealth {
 
-	/**
-	 * producer for database rediness check
-	 * 
-	 * @return health check funcional interface
-	 */
-	@Produces
-	@Readiness
-	public HealthCheck produceDataBaseCheck() {
-		return this::checkReadiness;
-	}
+    @Inject
+    private Config config;
 
-	/**
-	 * readiness
-	 * 
-	 * @return HealthCheckResponse
-	 */
-	public HealthCheckResponse checkReadiness() {
+    @Inject
+    private UsageCache usageCache;
 
-		HealthCheckResponseBuilder builder = HealthCheckResponse.builder().name("database");
-		builder.withData("POSTGRES" + "URL", "jdbc:postgresql://postgres-local:5432/coredb");
+    // @Produces
+    // @Readiness
+    // public HealthCheck produceDataBasePoolCheck() {
+    // return this::checkConnectionPool;
+    // }
 
-		String dsName = "icellmobilsoftDS";
-		DataSource datasource = getDataSource(dsName);
-		try {
-			connectWithTimeout(datasource, 10, TimeUnit.SECONDS);
-			builder.up();
-		} catch (Exception e) {
-			Logger.getLogger(DatabaseHealth.class).error("Error occurred while establishing connection: " + e.getLocalizedMessage(), e);
-			builder.down();
-		}
+    @Inject
+    @RegistryType(type = MetricRegistry.Type.VENDOR)
+    private MetricRegistry vendorRegistry;
 
-		return builder.build();
+    @Inject
+    @RegistryType(type = MetricRegistry.Type.APPLICATION)
+    private MetricRegistry applicationRegistry;
 
-	}
+    public HealthCheckResponse checkConnectionPool() {
 
-	private DataSource getDataSource(String dsName) {
-		try {
-			Context initContext = new InitialContext();
-			return (DataSource) initContext.lookup("java:jboss/datasources/" + dsName);
-		} catch (NamingException e) {
-			Logger.getLogger(DatabaseHealth.class).error("Error occured while getting datasource: " + e.getLocalizedMessage(), e);
-		}
-		return null;
-	}
+        Integer usagePercentTreshold = config.getOptionalValue("DATASOURCE_USAGE_TRESHOLD_PERCENT", Integer.class).orElse(80);
+        System.out.println("usagePercentTreshold: " + usagePercentTreshold);
 
-	private Connection connectWithTimeout(DataSource datasource, long timeout, TimeUnit unit)
-			throws InterruptedException, ExecutionException, TimeoutException {
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-		Future<Connection> future = executor.submit(() -> {
-			try (Connection connection = datasource.getConnection()) {
-				connection.isValid(1);
-				return connection;
-			}
-		});
-		return future.get(timeout, unit);
-	}
+        Integer maxPoolSize = config.getOptionalValue("POSTGRESQL_DS_MAX_POOL_SIZE", Integer.class).orElse(60);
+        System.out.println("max pool size: " + maxPoolSize);
+
+        MetricID inUseId = new MetricID("wildfly_datasources_pool_in_use_count", new Tag("data_source", "icellmobilsoftDS"));
+        Gauge<?> inUseGauge = vendorRegistry.getGauge(inUseId);
+        Double inUse = (Double) inUseGauge.getValue();
+        System.out.println("inuse " + inUse);
+
+        MetricID availableId = new MetricID("wildfly_datasources_pool_available_count", new Tag("data_source", "icellmobilsoftDS"));
+        Gauge<?> availableGauge = vendorRegistry.getGauge(availableId);
+        Double availableUse = (Double) availableGauge.getValue();
+        System.out.println("available " + availableUse);
+
+        double usagePercent = (inUse / maxPoolSize) * 100;
+        System.out.println(usagePercent);
+
+        HealthCheckResponseBuilder builder = HealthCheckResponse.builder().name("database_connectionPool");
+        builder.withData("DB_CONNECTION_USAGE_PERCENT", usagePercent + "%");
+
+        Metadata readinessDsPoolMeta = Metadata.builder().withName("READINESS_DS_POOL").withDescription("READINESS_DS_POOL")
+                .withType(MetricType.GAUGE).build();
+        Tag tag = new Tag("DS_USAGE_PERCENT_TRESHOLD", usagePercentTreshold + "");
+        if (usagePercent > usagePercentTreshold) {
+            // down mert db usage > 70%
+            builder.down();
+            usageCache.setWaitTime(1);
+            applicationRegistry.gauge(readinessDsPoolMeta, () -> usageCache.getWaitTime(), tag);
+
+        } else {
+            builder.up();
+            usageCache.setWaitTime(0);
+            applicationRegistry.gauge(readinessDsPoolMeta, () -> usageCache.getWaitTime(), tag);
+        }
+
+        return builder.build();
+    }
 
 }
