@@ -1,6 +1,6 @@
 version: "3.8"
 
-# futtatas
+# execution
 # docker-compose -f <PROJECT_PATH>/backend-sampler/etc/docker-compose/docker-compose.local.demoB.yml up --build --force-recreate
 services:
   sample-service-b:

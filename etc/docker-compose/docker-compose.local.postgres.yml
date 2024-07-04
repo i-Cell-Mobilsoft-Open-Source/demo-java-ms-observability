@@ -1,7 +1,7 @@
-# futtatas:
+# execution:
 # docker-compose -f docker-compose.local.postgres.yml up -d
 #
-# belemaszas:
+# running Docker in interactive mode:
 # docker exec -it postgres-local /bin/bash
 version: "3.8"
 
@@ -25,5 +25,5 @@ services:
 networks:
   default:
     external:
-      # Ha hiányolná a network-öt: docker network create mlff-exemption-local-network
+      # If the network is missing: docker network create mlff-exemption-local-network
       name: bs-local-network

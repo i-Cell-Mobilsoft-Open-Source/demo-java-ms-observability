@@ -61,7 +61,7 @@
             </exclusions>
         </dependency>
         <dependency>
-            <!-- hibernate-jpamodelgen -> javax.xml.bind:jaxb-api és javax.activation:javax.activation-api helyett -->
+            <!-- hibernate-jpamodelgen -> instead of javax.xml.bind:jaxb-api and javax.activation:javax.activation-api -->
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>

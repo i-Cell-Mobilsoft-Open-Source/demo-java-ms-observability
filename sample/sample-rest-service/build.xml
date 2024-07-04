@@ -4,7 +4,7 @@
     <import file="${basedir}/../../etc/ant/service-common.xml" as="service-common"/>
 
     <!--  service specific settings  -->
-    <!--  Itt kell beállítani a port offset-et és a használandó docker image-et -->
+    <!--  Here you need to set the port offset and specify the Docker image to use -->
 	<setenv offset="1" />
 
 </project>

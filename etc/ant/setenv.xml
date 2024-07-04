@@ -2,7 +2,7 @@
 <project name="setenv">
     <macrodef name="import-ant-contrib" description="Imports ant-contrib if its available, fails otherwise.">
         <sequential>
-            <!--  ant-contrib.jar-nak bent kell lennie a lokális ${ANT_HOME}/lib konyvtárban -->
+            <!--  The ant-contrib.jar must be present in the local ${ANT_HOME}/lib directory. -->
             <available resource="net/sf/antcontrib/antcontrib.properties" property="is.contrib.present"/>
             <fail unless="is.contrib.present"
                     message="The ant-contrib library of version 0.6 (ant-contrib-0.6.jar) must be present on classpath! Download the binary and place the jar in $ANT_HOME/lib! (https://sourceforge.net/projects/ant-contrib/files/ant-contrib/ant-contrib-0.6/)"/>
