@@ -11,7 +11,7 @@
 			<module name="org.apache.httpcomponents" />
 			<module name="com.google.guava" />
 			<module name="com.google.code.gson"/>
-			<!-- io.smallrye.config:smallrye-config-source-yaml miatt kell -->
+			<!-- needed because of io.smallrye.config:smallrye-config-source-yaml -->
 			<module name="io.smallrye.common.classloader" />
 			<module name="org.yaml.snakeyaml" />
 		</dependencies>

@@ -26,5 +26,5 @@ services:
 networks: 
   default: 
     external: 
-# hogyha hianyolja: docker network create dookug-local-network
+# if it misses it: docker network create dookug-local-network
       name: bs-local-network

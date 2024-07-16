@@ -69,8 +69,8 @@ public class ProjectMessageResolver extends DefaultMessageResolver {
                 return null;
             }
 
-            // NOTE deltaspike nem kezeli a konkurens message olvasast, copy lista kell hogy ne legyen ConcurrentModificationException
-            // nagy terhelés esetén jöhet elő ha több faultType is keletkezik 1 service példányon belül
+            // NOTE: Deltaspike does not handle concurrent message reading; use a copy list to avoid ConcurrentModificationException.
+            // This can occur under heavy load when multiple faultTypes are generated within one service instance.
             List<String> copy = new ArrayList<>(messageSources);
             Iterator<String> messageSourceIterator = copy.iterator();
 

@@ -36,56 +36,56 @@ public enum FaultType implements IFaultType<FaultType> {
 
     /**
      * HTTP 400 Response.Status.BAD_REQUEST<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.BadRequestException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.BadRequestException
      */
     REST_BAD_REQUEST,
     /**
      * HTTP 401 Response.Status.UNAUTHORIZED<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.NotAuthorizedException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.NotAuthorizedException
      */
     REST_UNAUTHORIZED,
     /**
      * HTTP 403 Response.Status.FORBIDDEN<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.ForbiddenException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.ForbiddenException
      */
     REST_FORBIDDEN,
     /**
      * HTTP 404 Response.Status.NOT_FOUND<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.NotFoundException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.NotFoundException
      */
     REST_NOT_FOUND,
     /**
      * HTTP 405 Response.Status.METHOD_NOT_ALLOWED<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.NotAllowedException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.NotAllowedException
      */
     REST_METHOD_NOT_ALLOWED,
     /**
      * HTTP 406 Response.Status.NOT_ACCEPTABLE<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.NotAcceptableException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.NotAcceptableException
      */
     REST_NOT_ACCEPTABLE,
     /**
      * HTTP 415 Response.Status.UNSUPPORTED_MEDIA_TYPE<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.NotSupportedException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.NotSupportedException
      */
     REST_UNSUPPORTED_MEDIA_TYPE,
     /**
      * HTTP 500 Response.Status.INTERNAL_SERVER_ERROR<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.InternalServerErrorException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.InternalServerErrorException
      */
     REST_INTERNAL_SERVER_ERROR,
     /**
      * HTTP 503 Response.Status.SERVICE_UNAVAILABLE<br>
-     * TechnicalFault nyelvesített lekezelése<br>
-     * Eredeti forrása a javax.ws.rs.ServiceUnavailableException
+     * Localized handling of TechnicalFault<br>
+     * original source is javax.ws.rs.ServiceUnavailableException
      */
     REST_SERVICE_UNAVAILABLE,
 }

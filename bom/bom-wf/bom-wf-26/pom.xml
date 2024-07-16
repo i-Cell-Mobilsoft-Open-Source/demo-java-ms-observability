@@ -30,7 +30,7 @@
         <!-- from org.wildfly.bom:wildfly-jakartaee8-with-tools -->
         <version.com.h2database>1.4.197</version.com.h2database>
 
-        <!-- benne van, de nem a bom-ban -->
+        <!-- It is included, but not in the BOM -->
         <version.commons-lang3>3.11</version.commons-lang3>
         <version.commons-beanutils>1.9.4</version.commons-beanutils>
         <version.commons-collections>3.2.2</version.commons-collections>
@@ -59,7 +59,7 @@
             </dependency>
 
             <!-- VVVVVVVVVVVVVVVVVVV -->
-            <!-- Provided-re allitas -->
+            <!-- Set to provided -->
             <!-- VVVVVVVVVVVVVVVVVVV -->
 
             <!-- https://github.com/wildfly/boms -->
@@ -88,7 +88,7 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- Resteasy 4+: resteasy-jaxrs szet van bontva core, core-spi es egyebekre-->
+            <!-- Resteasy 4+: resteasy-jaxrs is split into core, core-spi, and others-->
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
                 <artifactId>resteasy-core</artifactId>
@@ -154,7 +154,7 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- benne van, de nem a bom-ban -->
+            <!-- It is included, but not in the BOM. -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
